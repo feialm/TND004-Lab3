@@ -174,6 +174,7 @@ void test1() {
     }
 
     assert(BinarySearchTree<int>::get_count_nodes() == 0);
+	std::cout << "Klarade test 4, start with parent" << std::endl;
 
 #ifdef TEST_PARENT
 

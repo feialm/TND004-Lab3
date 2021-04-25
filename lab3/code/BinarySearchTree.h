@@ -25,79 +25,75 @@
 template <typename Comparable>
 class BinarySearchTree {
 
-    
-   // @ fei elin
-    class Node {
-    public:
-        Node(const Comparable &v, Node *l=nullptr, Node *r = nullptr)
-            : value{v}, left{l}, right{r}{}
-
-        Comparable value;
-        Node *left, *right; // left and right sub-trees
-
-
-        // 3 olika fall
-        // a smaller than X
-        // b bigger than X
-        // <a, b>
-        // kan inte använda +/- infinity, hitta substitut
-        std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const {
-
-           auto t = root;
-           Comparable a, b;
-
-           // base case
-           if (*t == nullptr) {
-               break;
-           }
-
-
-            
-           // loopa här
-            if (x > t.value)
-            {
-                t = t->right;
-                a = t.value;
-            }
-            else if(x < t.value)
-            {
-                t = t->left;
-                b = t.value;
-            }
-                 
-            if ( x == t.value ) // finns i trädet
-            {
-               b = findMin(t->right);
- 
-            }
-            else if ()
-            {
-
-
-
-
-            }
-
-
-
-
-            return <a, b>;
-        }
-    };
-
-
-
 private:
     struct Node;  // nested class defined in node.h
 
 public:
     class Iterator;  // Exercise 2: nested class to be defined in Iterator.h
 
+	/**********************EXCERCISE 1 @Fei_Elin ***********************/
+
+	//Vi har ej gjort remove. Behöver hjälp med
+	//get_parent och display har vi ej testat men försökt skriva, inga errors
+	//Har ej kollat om vi har leaks
+
+
+	std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const
+    {
+        // comparable är ett interface, alla noder ärver det
+        // auto fungerar också men get inte exmepel när man kodar
+		Node t = root;
+        Comparable a,b;
+        
+        
+		if (x > t.value) {
+			a = t.value;
+			t = t->right;
+		}
+		else if (x < t.value) {
+			b = t.value;
+			t = t->left;
+		}
+		else if (x == t.value) {
+			
+            if ((t->right !=nullptr) && (t->left !=nullptr)) {
+				a = findMax(t->left);
+				a = findMin(t->right);
+                
+            }
+			else if (t->right == nullptr) {
+				b = findMin(t->right);
+			}
+			else if (t->left== nullptr) {
+                a = findMax(t->left);
+			}
+			
+		}
+
+
+		return std::pair<a, b>;
+
+    } // end of find_pred_succ(const Comparable& x) const
+
+	Comparable get_parent(Comparable &x) {
+
+		Node temp = root;
+		Node child = contains(x, temp); //Skickar tillvaka nullptr om x inte finns
+		Node parentNode = child->parent;
+
+		if ((contains(x) == false) || (parentNode == nullptr)) {
+			return Comparable{};
+		}
+		else {
+		
+			return parentNode.value;
+		}
+	}
+
+	/********************************************************************/
 
     BinarySearchTree() : root{nullptr} {
     }
-
-
 
     /**
      * Copy constructor
@@ -131,7 +127,7 @@ public:
 
         return findMin(root)->element;
     }
-
+	
     /**
      * Find the largest item in the tree.
      * Throw UnderflowException if empty.
@@ -163,10 +159,13 @@ public:
      * Print the tree contents in sorted order.
      */
     void printTree(std::ostream &out = std::cout) const {
+        
+    
         if (isEmpty()) {
             out << "Empty tree";
         } else {
             inorder(root, out);
+           // preorder (root, out);
         }
     }
 
@@ -209,13 +208,22 @@ private:
      * Return a pointer to the node storing x.
      */
     Node *insert(const Comparable &x, Node *t) {
-        if (t == nullptr) {
-            t = new Node{x, nullptr, nullptr};
-        } else if (x < t->element) {
+        if (t == nullptr) // insert after a leaf
+        {
+			Node *tempParent = t;
+            t = new Node{x, nullptr, nullptr, tempParent}; //Funkar detta?
+        }
+        else if (x < t->element)
+        {
             t->left = insert(x, t->left);
-        } else if (t->element < x) {
+
+        }
+        else if (t->element < x)
+        {
             t->right = insert(x, t->right);
-        } else {
+        }
+        else
+        {
             ;  // Duplicate; do nothing
         }
         return t;
@@ -231,16 +239,35 @@ private:
         if (t == nullptr) {
             return t;  // Item not found
         }
-        if (x < t->element) {
+        if (x < t->element)
+        {
             t->left = remove(x, t->left);
-        } else if (t->element < x) {
+        }
+        else if (t->element < x)
+        {
             t->right = remove(x, t->right);
-        } else if (t->left != nullptr && t->right != nullptr) {  // Two children
+        }
+        else if (t->left != nullptr && t->right != nullptr)
+        {  // Two children
             t->element = findMin(t->right)->element;
             t->right = remove(t->element, t->right);
-        } else {
+        }
+        else
+        {
             Node *oldNode = t;
             t = (t->left != nullptr) ? t->left : t->right;
+
+			//Kan ha leaks här?
+            /*
+            if(t->left != nullptr) {
+                //if true, att t->left INTE är nullptr
+                t =  t->left;
+            } else {
+                r =  t->right;
+            }
+            */
+			
+			
             delete oldNode;
         }
         return t;
@@ -293,6 +320,7 @@ private:
             return t;  // Match
         }
     }
+
     /****** NONRECURSIVE VERSION*************************
     Node *contains(const Comparable &x, Node *t) const {
         while (t != nullptr) {
@@ -332,6 +360,20 @@ private:
         }
     }
 
+
+    /**********************EXCERCISE 1 @Fei_Elin ***********************/
+
+    void preorder(Node *t, std::ostream &out) const{
+        
+        // Do something: printar ut före den noden vi är i före vi går vidare i tree
+        out << t->element << '\n';
+
+        if (t != nullptr) {
+            preorder(t->left, out);
+            preorder(t->right, out);//Går den först hela vänster sidan innan höger sida?
+        }
+    }
+
     /**
      * Private member function to clone subtree.
      */
@@ -339,7 +381,7 @@ private:
         if (t == nullptr) {
             return nullptr;
         } else {
-            return new Node{t->element, clone(t->left), clone(t->right)};
+            return new Node{t->element, clone(t->left), clone(t->right), clone(t->parent)};
         }
     }
 };
