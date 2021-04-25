@@ -24,14 +24,80 @@
 
 template <typename Comparable>
 class BinarySearchTree {
+
+    
+   // @ fei elin
+    class Node {
+    public:
+        Node(const Comparable &v, Node *l=nullptr, Node *r = nullptr)
+            : value{v}, left{l}, right{r}{}
+
+        Comparable value;
+        Node *left, *right; // left and right sub-trees
+
+
+        // 3 olika fall
+        // a smaller than X
+        // b bigger than X
+        // <a, b>
+        // kan inte använda +/- infinity, hitta substitut
+        std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const {
+
+           auto t = root;
+           Comparable a, b;
+
+           // base case
+           if (*t == nullptr) {
+               break;
+           }
+
+
+            
+           // loopa här
+            if (x > t.value)
+            {
+                t = t->right;
+                a = t.value;
+            }
+            else if(x < t.value)
+            {
+                t = t->left;
+                b = t.value;
+            }
+                 
+            if ( x == t.value ) // finns i trädet
+            {
+               b = findMin(t->right);
+ 
+            }
+            else if ()
+            {
+
+
+
+
+            }
+
+
+
+
+            return <a, b>;
+        }
+    };
+
+
+
 private:
     struct Node;  // nested class defined in node.h
 
 public:
     class Iterator;  // Exercise 2: nested class to be defined in Iterator.h
 
+
     BinarySearchTree() : root{nullptr} {
     }
+
+
 
     /**
      * Copy constructor
