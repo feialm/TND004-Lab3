@@ -33,9 +33,9 @@ public:
 
 	/**********************EXCERCISE 1 @Fei_Elin ***********************/
 
-	//Vi har ej gjort remove. Behöver hjälp med
 	//get_parent och display har vi ej testat men försökt skriva, inga errors
 	//Har ej kollat om vi har leaks
+    // problem med clone
 
 
 	std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const
@@ -75,19 +75,27 @@ public:
 
     } // end of find_pred_succ(const Comparable& x) const
 
-	Comparable get_parent(Comparable &x) {
+	Comparable get_parent(int x) {
 
-		Node temp = root;
-		Node child = contains(x, temp); //Skickar tillvaka nullptr om x inte finns
-		Node parentNode = child->parent;
-
-		if ((contains(x) == false) || (parentNode == nullptr)) {
+		Node *temp = root;
+		Node *child = contains(x, temp); //Skickar tillbaka nullptr om x inte finns
+		
+        
+        if (child == nullptr) {
 			return Comparable{};
 		}
-		else {
-		
-			return parentNode.value;
-		}
+        else{
+			Node* parentNode = child->parent;
+                
+            if(parentNode != nullptr){
+                    return parentNode->element;
+			}
+			else {
+				return Comparable{};
+			}
+   
+        }
+
 	}
 
 	/********************************************************************/
@@ -208,19 +216,29 @@ private:
      * Return a pointer to the node storing x.
      */
     Node *insert(const Comparable &x, Node *t) {
+
         if (t == nullptr) // insert after a leaf
         {
-			Node *tempParent = t;
-            t = new Node{x, nullptr, nullptr, tempParent}; //Funkar detta?
+			// förälder är nullptr i nuläget eftersom man inte vet vem föräldern är än
+            t = new Node{x, nullptr, nullptr, nullptr};  
+
         }
         else if (x < t->element)
         {
-            t->left = insert(x, t->left);
+            Node *newNode = insert(x, t->left); // får en ny nod från if-satsen ovanför
+            
+            t->left = newNode; //t->left = förälder till NewNode
+
+			newNode->parent = t; // tillger en förälder t till den nya noden newNode
 
         }
         else if (t->element < x)
         {
-            t->right = insert(x, t->right);
+            Node *newNode = insert(x, t->right); // får en ny nod från översta if-satsen 
+
+            t->right = newNode;  //t->right = förälder till NewNode
+
+            newNode->parent = t; // tillger en förälder t till den nya noden newNode
         }
         else
         {
@@ -241,23 +259,47 @@ private:
         }
         if (x < t->element)
         {
-            t->left = remove(x, t->left);
+
+            Node *dummyNode =  remove(x, t->left);
+            
+            t->left = dummyNode; 
+
+			if(dummyNode != nullptr){
+                dummyNode->parent = t;
+            }
+
+            //t->left = remove(x, t->left);
         }
         else if (t->element < x)
         {
-            t->right = remove(x, t->right);
+            Node *dummyNode =  remove(x, t->right);
+            
+            t->right = dummyNode; 
+
+			//Ifall vi är vid roten. Root har ingen förälder
+			if (dummyNode != nullptr) {
+				dummyNode->parent = t;
+			}
+			    
+        
+            //t->right = remove(x, t->right);
         }
         else if (t->left != nullptr && t->right != nullptr)
-        {  // Two children
+        {  
+            // Two children
+            // no removing, only switching nodes, parent and left child
             t->element = findMin(t->right)->element;
             t->right = remove(t->element, t->right);
         }
         else
         {
             Node *oldNode = t;
-            t = (t->left != nullptr) ? t->left : t->right;
+            t = (t->left != nullptr) ? t->left : t->right; //oldNode->left : OldNode->right
 
+			//oldNode->parent = nullptr; //är detta rätt?? Är detta enda?
 			//Kan ha leaks här?
+
+
             /*
             if(t->left != nullptr) {
                 //if true, att t->left INTE är nullptr
@@ -376,13 +418,15 @@ private:
 
     /**
      * Private member function to clone subtree.
-     */
+     *////Denna funkar ej kolla vidare på, debugg. Förälderna
     Node *clone(Node *t) const {
+
+
         if (t == nullptr) {
             return nullptr;
         } else {
             return new Node{t->element, clone(t->left), clone(t->right), clone(t->parent)};
-        }
+        }//t->parent föräldern är redan clonad så vi behöver ej skriva clone(t->parent)
     }
 };
 
