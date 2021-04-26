@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>  // used in node.h
+#include <string>  // to print out tree
 
 #include "dsexceptions.h"
 
@@ -42,36 +43,38 @@ public:
     {
         // comparable är ett interface, alla noder ärver det
         // auto fungerar också men get inte exmepel när man kodar
+		//Node *t = this;
 		Node t = root;
-        Comparable a,b;
+        pair<Comparable, Comparable> aANDb;
+        //Comparable a,b;
         
         
-		if (x > t.value) {
-			a = t.value;
+		if (x > t.element) {
+			aANDb.first = t.element;
 			t = t->right;
 		}
-		else if (x < t.value) {
-			b = t.value;
+		else if (x < t.element) {
+            aANDb.second = t.value;
 			t = t->left;
 		}
-		else if (x == t.value) {
+		else if (x == t.element) {
 			
             if ((t->right !=nullptr) && (t->left !=nullptr)) {
-				a = findMax(t->left);
-				a = findMin(t->right);
+                aANDb.first = findMax(t->left);
+                aANDb.second = findMin(t->right);
                 
             }
 			else if (t->right == nullptr) {
-				b = findMin(t->right);
+                aANDb.second = findMin(t->right);
 			}
 			else if (t->left== nullptr) {
-                a = findMax(t->left);
+                aANDb.first = findMax(t->left);
 			}
 			
 		}
 
 
-		return std::pair<a, b>;
+		return aANDb;
 
     } // end of find_pred_succ(const Comparable& x) const
 
@@ -106,7 +109,7 @@ public:
     /**
      * Copy constructor
      */
-    BinarySearchTree(const BinarySearchTree &rhs) : root{clone(rhs.root)} {
+    BinarySearchTree(const BinarySearchTree &rhs) : root{clone(rhs.root, nullptr)} {
     }
 
     /**
@@ -168,12 +171,14 @@ public:
      */
     void printTree(std::ostream &out = std::cout) const {
         
-    
+        
         if (isEmpty()) {
             out << "Empty tree";
         } else {
-            inorder(root, out);
-           // preorder (root, out);
+           // inorder(root, out);
+           int indent = 0;
+
+           preorder (root, out, indent);
         }
     }
 
@@ -405,27 +410,39 @@ private:
 
     /**********************EXCERCISE 1 @Fei_Elin ***********************/
 
-    void preorder(Node *t, std::ostream &out) const{
+    void preorder(Node *t, std::ostream &out, int indent) const{
+
         
-        // Do something: printar ut före den noden vi är i före vi går vidare i tree
-        out << t->element << '\n';
 
         if (t != nullptr) {
-            preorder(t->left, out);
-            preorder(t->right, out);//Går den först hela vänster sidan innan höger sida?
+            // Do something: printar ut före den noden vi är i före vi går vidare i tree
+            
+            out << std::string(indent, ' ')<< t->element << '\n';
+            //std::cout << "HEHJHJKJSKD" << '\n';
+
+            indent= indent +2;
+            preorder(t->left, out, indent);
+            preorder(t->right, out, indent); //Går den först hela vänster sidan innan höger sida?
         }
+ 
     }
 
     /**
      * Private member function to clone subtree.
      *////Denna funkar ej kolla vidare på, debugg. Förälderna
-    Node *clone(Node *t) const {
+    Node *clone(Node *t, Node* parent) const {
 
 
         if (t == nullptr) {
             return nullptr;
         } else {
-            return new Node{t->element, clone(t->left), clone(t->right), clone(t->parent)};
+
+            parent = new Node{t->element, nullptr, nullptr, parent};
+            parent->left = clone(t->left, parent);
+            parent->right = clone(t->right, parent);
+
+            return parent;
+
         }//t->parent föräldern är redan clonad så vi behöver ej skriva clone(t->parent)
     }
 };
