@@ -44,37 +44,53 @@ public:
         // comparable är ett interface, alla noder ärver det
         // auto fungerar också men get inte exmepel när man kodar
 		//Node *t = this;
-		Node t = root;
-        pair<Comparable, Comparable> aANDb;
-        //Comparable a,b;
+
+		
+		Node *t = root;
+        Comparable a = -100000;
+        Comparable b = 100000;
+		
+        std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b);
         
-        
-		if (x > t.element) {
-			aANDb.first = t.element;
-			t = t->right;
-		}
-		else if (x < t.element) {
-            aANDb.second = t.value;
-			t = t->left;
-		}
-		else if (x == t.element) {
-			
-            if ((t->right !=nullptr) && (t->left !=nullptr)) {
-                aANDb.first = findMax(t->left);
-                aANDb.second = findMin(t->right);
-                
+        while ((t->left != nullptr) && (t->right != nullptr) ) {
+
+            if (x > t->element) {
+                aANDb.first = t->element; // updatera a
+                t = t->right;
             }
-			else if (t->right == nullptr) {
-                aANDb.second = findMin(t->right);
-			}
-			else if (t->left== nullptr) {
-                aANDb.first = findMax(t->left);
-			}
-			
-		}
+            else if (x < t->element) {
+                aANDb.second = t->element; // updatera b
+                t = t->left; 
+            }
+            else if (x == t->element) {
+
+                if ((t->right != nullptr) && (t->left != nullptr)) {
+
+                    Node* dummy1 = findMin(t->right);
+                    aANDb.second = dummy1->element; // updatera b
+
+                    Node* dummy2 = findMax(t->left);                 
+                    aANDb.first = dummy2->element; // updatera a
+
+                }
+                else if (t->right == nullptr) {
+
+                    Node* dummy3 = findMax(t->left);
+                    aANDb.first = dummy3->element; // updatera a
+                }
+                else if (t->left == nullptr) {
+
+                    Node* dummy4 = findMin(t->right);
+                    aANDb.second = dummy4->element; // updatera b
+                     
+                }
+
+            }
 
 
-		return aANDb;
+
+        }
+        return aANDb;
 
     } // end of find_pred_succ(const Comparable& x) const
 
