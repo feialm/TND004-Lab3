@@ -32,19 +32,47 @@ private:
 public:
 	class Iterator;  // Exercise 2: nested class to be defined in Iterator.h
 
+
+	//Var ska end och begin vara?
+	//Iterator begin();
+	//Iterator end();
+
 	/**********************EXCERCISE 1 @Fei_Elin ***********************/
 
 	//get_parent och display har vi ej testat men försökt skriva, inga errors
 	//Har ej kollat om vi har leaks
 	// problem med clone
+	
+	Iterator end()const
+	{
 
+		return Iterator(nullptr, this);
+	}
+
+	Iterator begin()
+	{
+		if (isEmpty())return end();
+		return Iterator(findMin(root), this);
+	}
+	
+	Iterator find(const Comparable& x)
+	{
+		if (contains(x, root) != nullptr)
+		{
+			return Iterator{contains(x, root), this};
+		}
+		else {
+			return end();
+		}
+		
+	}
+	
 
 	std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const
 	{
 		// comparable är ett interface, alla noder ärver det
 		// auto fungerar också men get inte exmepel när man kodar
 		//Node *t = this;
-
 
 		Node* t = root;
 		Comparable a = x;
@@ -240,6 +268,43 @@ public:
 
 private:
 	Node* root;
+
+
+	/***********	Exercise 2	********/
+	// successor - value closest below Node
+	Node* find_successor(Node* t) const {
+
+		Comparable a = nullptr;
+		Comparable b = nullptr;
+		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b );
+		aANDb =find_pred_succ(t->element);
+		if (contains(t->element, t.root) != nullptr) {
+			return  aANDb.second;
+		}
+		else {
+			return nullptr;
+		}
+
+	}
+
+	Node* find_predecessor(Node* t) const {
+
+		Comparable a = nullptr;
+		Comparable b = nullptr;
+		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b);
+
+		aANDb = find_pred_succ(t->element);
+
+		if (contains(t->element, t.root) != nullptr) {
+			return  aANDb.first;
+		}
+		else {
+			return nullptr;
+		}
+
+	}
+
+
 
 	/**
 	 * Private member function to insert into a subtree.
@@ -445,7 +510,7 @@ private:
 
 
 		if (t != nullptr) {
-			// Do something: printar ut före den noden vi är i före vi går vidare i tree
+			// Do something: printar ut före den node den är i före går vidare i tree
 
 			out << std::string(indent, ' ') << t->element << '\n';
 			//std::cout << "HEHJHJKJSKD" << '\n';
