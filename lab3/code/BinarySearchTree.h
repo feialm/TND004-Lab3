@@ -46,7 +46,7 @@ public:
 	Iterator end()const
 	{
 
-		return Iterator(nullptr, this);
+		return Iterator{ };
 	}
 
 	Iterator begin()
@@ -278,8 +278,8 @@ private:
 		Comparable b = nullptr;
 		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b );
 		aANDb =find_pred_succ(t->element);
-		if (contains(t->element, t.root) != nullptr) {
-			return  aANDb.second;
+		if (contains(t->element, root) != nullptr) {
+			return  &Node{ aANDb.second };
 		}
 		else {
 			return nullptr;
@@ -295,13 +295,13 @@ private:
 
 		aANDb = find_pred_succ(t->element);
 
-		if (contains(t->element, t.root) != nullptr) {
-			return  aANDb.first;
+		if (contains(t->element, root) != nullptr) {
+			return  &Node{ aANDb.first };
 		}
 		else {
 			return nullptr;
 		}
-
+		
 	}
 
 
