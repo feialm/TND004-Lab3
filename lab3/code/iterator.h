@@ -38,19 +38,19 @@ public:
 
 	Iterator& operator++()
 	{
-		Node* current = p;
-		current = pointTree->find_successor(current);
+		
+		p = pointTree->find_successor(p);
 		return *this;
 	}
 
 	Iterator& operator--()
 	{
-		Node* current = pointTree->find_predecessor(p);
+		 p = pointTree->find_predecessor(p);
 		return *this;
 	}
 
 	/////////////////////////////////////////
-
+	//Ta bort alla current!!! 
 	// return value node is pointing at
 	Comparable& operator*()
 	{

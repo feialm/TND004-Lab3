@@ -41,9 +41,9 @@ void test3() {
         assert(BinarySearchTree<std::string>::get_count_nodes() == 35);
 
         // Display the tree
-        /*std::cout << "Tree: \n";
+        std::cout << "Tree: \n";
         t.printTree();
-        std::cout << '\n';*/
+        std::cout << '\n';
 
         // Load the expected inorder traversal of the tree
         file.open("../code/inorder_traversal.txt");
@@ -75,7 +75,7 @@ void test3() {
                 assert(t.find(w) == t.end());
             }
         }
-
+		std::cout << "\nMade test0\n";
         /****************************************************/
         std::cout << "\nPHASE 1: operator++, operator*\n";
         /****************************************************/
@@ -87,6 +87,7 @@ void test3() {
                  V1.push_back(*it);
              }*/
 
+			//Denna får vi fel på. Andra varvet Iterator& operator++() i Iterator.h
             // Inorder traversal
             for (auto w : t) {
                 V1.push_back(w);
@@ -94,6 +95,7 @@ void test3() {
 
             assert(V1 == inorder);
         }
+		std::cout << "\nMade test0\n";
 
         /****************************************************/
         std::cout << "\nPHASE 2: operator--, operator*\n";

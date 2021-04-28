@@ -46,7 +46,7 @@ public:
 	Iterator end()const
 	{
 
-		return Iterator{ };
+		return Iterator{nullptr, this};
 	}
 
 	Iterator begin()
@@ -273,13 +273,13 @@ private:
 	/***********	Exercise 2	********/
 	// successor - value closest below Node
 	Node* find_successor(Node* t) const {
-
-		Comparable a = nullptr;
-		Comparable b = nullptr;
+		//skriv om den
+		Comparable a;
+		Comparable b;
 		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b );
 		aANDb =find_pred_succ(t->element);
 		if (contains(t->element, root) != nullptr) {
-			return  &Node{ aANDb.second };
+			return  &Node{ aANDb.second };//kan ge tillbaka något som inte finns
 		}
 		else {
 			return nullptr;
@@ -288,9 +288,9 @@ private:
 	}
 
 	Node* find_predecessor(Node* t) const {
-
-		Comparable a = nullptr;
-		Comparable b = nullptr;
+		//skriv om den.
+		Comparable a;
+		Comparable b;
 		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b);
 
 		aANDb = find_pred_succ(t->element);
