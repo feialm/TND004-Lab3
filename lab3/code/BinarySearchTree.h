@@ -39,14 +39,12 @@ public:
 
 	/**********************EXCERCISE 1 @Fei_Elin ***********************/
 
-	//get_parent och display har vi ej testat men försökt skriva, inga errors
-	//Har ej kollat om vi har leaks
-	// problem med clone
+	// Kolla om vi har leaks
 	
-	Iterator end()const
+	Iterator end() //const
 	{
 
-		return Iterator{nullptr, this};
+		return Iterator(nullptr, this);
 	}
 
 	Iterator begin()
@@ -271,9 +269,28 @@ private:
 
 
 	/***********	Exercise 2	********/
-	// successor - value closest below Node
+	// successor - value closest after (value) Node
+
+
 	Node* find_successor(Node* t) const {
 		//skriv om den
+
+
+		if (t != nullptr && t->right != nullptr) // t has a right sub-tree, go down in tree
+		{
+			return findMin(t->right);
+		}
+		else // successor is one of the ancestors
+		{
+			while (t != t->parent->left) {
+				
+				t = t->parent; // climbing up the tree, go up in tree
+
+			}
+
+		}
+
+		/*
 		Comparable a;
 		Comparable b;
 		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b );
@@ -284,10 +301,15 @@ private:
 		else {
 			return nullptr;
 		}
+		*/
 
 	}
 
+
+	// predecessor - value closest before (value) Node
 	Node* find_predecessor(Node* t) const {
+		
+		/*
 		//skriv om den.
 		Comparable a;
 		Comparable b;
@@ -301,6 +323,24 @@ private:
 		else {
 			return nullptr;
 		}
+
+		*/
+
+
+		if (t != nullptr && t->left != nullptr) // t has a right sub-tree, go down in tree
+		{
+			return findMax(t->left);
+		}
+		else // successor is one of the ancestors
+		{
+			while (t != t->parent->right) {
+
+				t = t->parent; // climbing up the tree, go up in tree
+
+			}
+
+		}
+
 		
 	}
 

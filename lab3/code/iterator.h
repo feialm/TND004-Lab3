@@ -54,15 +54,13 @@ public:
 	// return value node is pointing at
 	Comparable& operator*()
 	{
-		Node* current = p;
-		return current->element;
+		return p->element;
 	}
 
 	// a reference to a value
 	Comparable* operator->()
 	{
-		Node* current = p;
-		return &(current->element); //memroy location
+		return &(p->element); //memroy location
 	}
 
 	/*
@@ -96,9 +94,6 @@ private:
 	Node* p;
 	BinarySearchTree* pointTree;
 
-	//Var ska end och begin vara?
-	//Iterator begin();
-	//Iterator end();
 
 	//constructor
 	// tree is pointing to tree
