@@ -50,7 +50,7 @@ public:
 	}
 
 	/////////////////////////////////////////
-	//Ta bort alla current!!! 
+
 	// return value node is pointing at
 	Comparable& operator*()
 	{

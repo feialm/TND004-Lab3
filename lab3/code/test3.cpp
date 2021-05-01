@@ -95,7 +95,7 @@ void test3() {
 
             assert(V1 == inorder);
         }
-		std::cout << "\nMade test0\n";
+		std::cout << "\nMade test1\n";
 
         /****************************************************/
         std::cout << "\nPHASE 2: operator--, operator*\n";
@@ -115,7 +115,7 @@ void test3() {
             std::sort(V1.begin(), V1.end());
             assert(V1 == inorder);
         }
-
+		std::cout << "\nMade test2\n";
         /*****************************************************************/
         std::cout << "\nPHASE 3: test iterators with STL algorithms\n";
         /*****************************************************************/
@@ -138,5 +138,7 @@ void test3() {
     assert(BinarySearchTree<std::string>::get_count_nodes() == 0);
 
     std::cout << "\nSuccess!!\n";
+		std::cout << "\nMade test3\n";
+
 #endif
 }

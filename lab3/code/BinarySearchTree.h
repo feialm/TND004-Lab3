@@ -275,76 +275,51 @@ private:
 	Node* find_successor(Node* t) const {
 		//skriv om den
 
+		if (t != nullptr) {
 
-		if (t != nullptr && t->right != nullptr) // t has a right sub-tree, go down in tree
-		{
-			return findMin(t->right);
-		}
-		else // successor is one of the ancestors
-		{
-			while (t != t->parent->left) {
-				
-				t = t->parent; // climbing up the tree, go up in tree
+			if (t->right != nullptr) // t has a right sub-tree, go down in tree
+			{
+				return findMin(t->right);
+			}
+			else // successor is one of the ancestors
+			{
+				while (t != t->parent->left && t->parent != nullptr) {
 
+					t = t->parent; // climbing up the tree, go up in tree
+
+				}
+				return t;
 			}
 
 		}
-
-		/*
-		Comparable a;
-		Comparable b;
-		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b );
-		aANDb =find_pred_succ(t->element);
-		if (contains(t->element, root) != nullptr) {
-			return  &Node{ aANDb.second };//kan ge tillbaka något som inte finns
-		}
-		else {
-			return nullptr;
-		}
-		*/
 
 	}
 
 
 	// predecessor - value closest before (value) Node
 	Node* find_predecessor(Node* t) const {
-		
-		/*
-		//skriv om den.
-		Comparable a;
-		Comparable b;
-		std::pair<Comparable, Comparable> aANDb = std::make_pair(a,b);
 
-		aANDb = find_pred_succ(t->element);
+	
+		if (t != nullptr) {
 
-		if (contains(t->element, root) != nullptr) {
-			return  &Node{ aANDb.first };
-		}
-		else {
-			return nullptr;
-		}
+			if (t != nullptr && t->left != nullptr) // t has a left sub-tree, go down in tree
+			{
+				return findMax(t->left);
+			}
+			else // predecessor is one of the ancestors
+			{
+				while (t != t->parent->right && t->parent != nullptr) {
 
-		*/
+					t = t->parent; // climbing up the tree, go up in tree
 
-
-		if (t != nullptr && t->left != nullptr) // t has a right sub-tree, go down in tree
-		{
-			return findMax(t->left);
-		}
-		else // successor is one of the ancestors
-		{
-			while (t != t->parent->right) {
-
-				t = t->parent; // climbing up the tree, go up in tree
+				}
 
 			}
+			return t;
 
 		}
 
-		
 	}
-
-
 
 	/**
 	 * Private member function to insert into a subtree.
