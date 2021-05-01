@@ -9,12 +9,12 @@
 template <typename Comparable>
 class BinarySearchTree<Comparable>::Iterator {
 public:
-    // Some properties for Iterator  -- so that Iterator can be used with STL-algorithms
-    using iterator_category = std::bidirectional_iterator_tag;
-    using difference_type   = std::ptrdiff_t;
-    using value_type        = Comparable;
-    using pointer           = Comparable*;  // or also value_type*
-    using reference         = Comparable&;  // or also value_type&
+	// Some properties for Iterator  -- so that Iterator can be used with STL-algorithms
+	using iterator_category = std::bidirectional_iterator_tag;
+	using difference_type = std::ptrdiff_t;
+	using value_type = Comparable;
+	using pointer = Comparable*;  // or also value_type*
+	using reference = Comparable&;  // or also value_type&
 
 	//Från länken om iteratorer i labbbeskrivningen @ElinFei
 
@@ -24,7 +24,7 @@ public:
 
 	//reference operator*() const { return *m_ptr; }
 	//pointer operator->() { return m_ptr; }
-	
+
 	//Iterator& operator++() {p++; return *this; } // Prefix increment
 	Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }  // Postfix increment
 
@@ -38,14 +38,14 @@ public:
 
 	Iterator& operator++()
 	{
-		
+
 		p = pointTree->find_successor(p);
 		return *this;
 	}
 
 	Iterator& operator--()
 	{
-		 p = pointTree->find_predecessor(p);
+		p = pointTree->find_predecessor(p);
 		return *this;
 	}
 
@@ -64,10 +64,8 @@ public:
 	}
 
 	/*
-
 	bool operator==(Iterator a, Iterator b)
 	{
-
 		if (a == b)
 		{
 			return true;
@@ -75,9 +73,7 @@ public:
 		else {
 			return false;
 		}
-
 	}
-
 	bool operator!=(Iterator a, Iterator b)
 	{
 		if (a == b)
@@ -98,19 +94,19 @@ private:
 	//constructor
 	// tree is pointing to tree
 	// t is pointing to node
-	Iterator(Node* point, BinarySearchTree* tree) : p{ point }, pointTree{tree} {
+	Iterator(Node* point, BinarySearchTree* tree) : p{ point }, pointTree{ tree } {
 		//Sök efter p = den du är på 
 		//pointtree = trädet
 		//++count_nodes;
 	}
 
 
-    /* ****************************************************************** */
+	/* ****************************************************************** */
 	template <typename Comparable>
-    friend class BinarySearchTree;
+	friend class BinarySearchTree;
 
 
 
-	
+
 
 }; // end of class BinarySearchTree<Comparable>::Iterator

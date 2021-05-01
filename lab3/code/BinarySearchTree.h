@@ -40,7 +40,7 @@ public:
 	/**********************EXCERCISE 1 @Fei_Elin ***********************/
 
 	// Kolla om vi har leaks
-	
+
 	Iterator end() //const
 	{
 
@@ -52,19 +52,19 @@ public:
 		if (isEmpty())return end();
 		return Iterator(findMin(root), this);
 	}
-	
+
 	Iterator find(const Comparable& x)
 	{
 		if (contains(x, root) != nullptr)
 		{
-			return Iterator{contains(x, root), this};
+			return Iterator{ contains(x, root), this };
 		}
 		else {
 			return end();
 		}
-		
+
 	}
-	
+
 
 	std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const
 	{
@@ -106,7 +106,7 @@ public:
 					t = nullptr;
 				}
 				else if (t->right == nullptr) {
-				
+
 					Node* dummy3 = findMax(t->left);
 					aANDb.first = dummy3->element; // updatera a
 					//break;
@@ -283,12 +283,22 @@ private:
 			}
 			else // successor is one of the ancestors
 			{
+				Node* child = t;
+				Node* parent = child->parent;
+
+				while (parent != nullptr && child == parent->right) {
+					//std::cout << "parent: " << parent->element << " child: " << child->element;
+					child = parent;
+					parent = child->parent;
+				}
+				/*
 				while (t != t->parent->left && t->parent != nullptr) {
 
 					t = t->parent; // climbing up the tree, go up in tree
 
 				}
-				return t;
+				*/
+				return parent;
 			}
 
 		}
@@ -299,7 +309,7 @@ private:
 	// predecessor - value closest before (value) Node
 	Node* find_predecessor(Node* t) const {
 
-	
+
 		if (t != nullptr) {
 
 			if (t != nullptr && t->left != nullptr) // t has a left sub-tree, go down in tree
@@ -308,14 +318,17 @@ private:
 			}
 			else // predecessor is one of the ancestors
 			{
-				while (t != t->parent->right && t->parent != nullptr) {
+				Node* child = t;
+				Node* parent = child->parent;
 
-					t = t->parent; // climbing up the tree, go up in tree
+				while (parent != nullptr && child == parent->left) {
+					child = parent;
+					parent = child->parent;// climbing up the tree, go up in tree
 
 				}
-
+				return parent;
 			}
-			return t;
+			
 
 		}
 
