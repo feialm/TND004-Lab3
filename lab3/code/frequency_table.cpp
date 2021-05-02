@@ -69,6 +69,11 @@ struct Row
 		}
 	}
 
+
+	std::vector<Row> sorting() {
+
+	}
+
 	
 };
 
@@ -92,8 +97,8 @@ void exercise3() {
 
 		std::string word = "";
 
-        std::ifstream file("../code/text.txt");  // contains 56 unique words
-        //std::ifstream file("../code/text_long.txt"); // contains 497 unique words
+        //std::ifstream file("../code/text.txt");  // contains 56 unique words
+        std::ifstream file("../code/text_long.txt"); // contains 497 unique words
 
         if (!file) {
             std::cout << "Couldn't open file text.txt\n";
@@ -179,10 +184,10 @@ void exercise3() {
 
 
 		// Display the freq.table
-		std::cout << "------ Table: ----------\n";
+		std::cout << "\n------ Table: ----------\n";
 
 		// skapar en iterator som kan gå igenom vector V och ta fram key och counter
-		for (std::vector<Row>::const_iterator j = V.begin(); j != V.end(); ++j) {
+		for (std::vector<Row>::iterator j = V.begin(); j != V.end(); ++j) {
 
 			// variabler som ger mellanslag mellan ord och counter
 			const char separator = ' ';
@@ -191,20 +196,61 @@ void exercise3() {
 
 			// left gör att j->key och j->counte rbörja rtill vänster i sitt lilla utrymme
 			std::cout << std::left << std::setw(wordWidth) << std::setfill(separator) << j->key;
-			std::cout<< std::left << std::setw(counterWidth) << std::setfill(separator) << j->counter << "\n";
+			std::cout << std::left << std::setw(counterWidth) << std::setfill(separator) << j->counter << "\n";
 
 		}
 
+		std::vector<Row>V2;
+		//std::copy(V.begin(), V.end(), V2.begin());
+
+		std::vector<Row>::iterator i = V2.begin();
+		std::vector<Row>::iterator j = V2.begin();
+		
+
+		while(i != V2.end()) {
+
+			j = i;
+			while (j != V2.end()) {
+
+				if (i->counter < j->counter) {
+
+					auto temp = *i; // ha * före iteratorn, då får man DET som iteratorn pekar på
+					*i = *j;
+					*j = temp;
+
+				}
+				j++;
+			}
+			i++;
+		}
+
+		
+
+
+		std::cout << "\n------ Table Counter: ----------\n";
+		// skapar en iterator som kan gå igenom vector V och ta fram key och counter
+		for (std::vector<Row>::const_iterator j = V.begin(); j != V.end() - 1; ++j) {
+			// variabler som ger mellanslag mellan ord och counter
+			const char separator = ' ';
+			const int wordWidth = 25; //utrymme finns för 25 bokstäver i ett ord
+			const int counterWidth = 3; //utrymme för counter
+
+			// left gör att j->key och j->counter börjar till vänster i sitt lilla utrymme
+			std::cout << std::left << std::setw(wordWidth) << std::setfill(separator) << j->key;
+			std::cout << std::left << std::setw(counterWidth) << std::setfill(separator) << j->counter << "\n";
+
+			
+		}
 		std::cout << "\nEND TABLE\n\n";
+	
+		
 
-
-
-		// COMPARE FACIT WITH FACIT
+		// COMPARE FACIT
 		// för att kunna jämföra vectorerna ska man göra en vector av facit-filerna
 		// jämför vector som skapats av binary tree, binary tree har skapats av textfiler
 	
-		std::ifstream file2("../code/frequency_table.txt");  // facit for text.txt
-		//std::ifstream file2("../code/frequency_table_long.txt"); // facit for text_long.txt
+		//std::ifstream file2("../code/frequency_table.txt");  // facit for text.txt
+		std::ifstream file2("../code/frequency_table_long.txt"); // facit for text_long.txt
 
 		std::vector<Row> facit;
 		std::string aWord;
@@ -217,7 +263,7 @@ void exercise3() {
 			facit.push_back(prepareForFacit);
 		}
 
-		 assert(V == facit); // COMPARE FACIT WITH FACIT
+		 assert(V == facit); // COMPARE FACIT 
 
 	}
 
