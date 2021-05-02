@@ -29,7 +29,11 @@ struct Row
 	std::string key = "";
 	int counter = 1;
 
-	// returnerar den minsta
+	// i insert() i binarysearchtree kollar man t->element
+	// i en row är det t->element men eftersom en row har två värden
+	// skapar man egna operatorer för att JÄMFÖRA key
+	// insert() i binarysearch vet inte vad den ska jämföra och den kallar på dessa operator-funktioner
+
 	bool operator<(const Row& rhs) const
 	{
 		if (key < rhs.key)
@@ -65,9 +69,6 @@ struct Row
 		}
 	}
 
-
-
-
 	
 };
 
@@ -80,9 +81,6 @@ std::ostream& operator<<(std::ostream& os, const Row& dt)
 	return os;
 
 }
-
-
-
 
 
 
@@ -113,15 +111,17 @@ void exercise3() {
         while(file >> word)
 		{
         
-        // för att to-low orden
-		//Den 3 word.begin() säger att vi vill lägga in/override transformationen i början av ordet. Så Elin blir elin
-		//Om vi hade haft word.end() där så hade det blivit ex Elinelin för vi börjar inserta i slutet av ordet
+		// den tredje argumentet word.begin --> säger att man vill lägga in/override transfomrationen o böjran av ordet
+		// alltså att man ändrar från början till slut i order, Elin --> elin, HEJ --> hej
+
+		//den tredje haft word.end() där så hade det blivit ex Elinelin för vi börjar inserta i slutet av ordet
+
 		std::transform(word.begin(), word.end(), word.begin(), [](char c) {return static_cast<char>(std::tolower(c)); });
 
 
-		// std::remove(word.begin(), word.end(), ',' är en iterator med villkor, vad den ska göra
+		// remove skapar en iteror som letar upp alla tecken
+		// std::remove(word.begin(), word.end(), ',' är en iterator med villkor som letar upp det där tecknet
 		// anropar next funktion, returnera nästa som är enligt krav
-		// remove skapar en iteror som letar upp alla något-tecken
 		// erase använder iteratorn för att ta bort 'tecken'
 		// word.erase, det är funktionen erase som tar bort tecknen från objektet word
 		
@@ -138,45 +138,27 @@ void exercise3() {
 		
 		//remove_if kan man göra det i en linje
 
-		
-		// Read all words in the file into a vector
-		//std::vector<std::string> V{ std::istream_iterator<std::string>{word},
-								  // std::istream_iterator<std::string>{} };
 
-
-
-		BinarySearchTree<Row>::Iterator compareWord = table.begin();
 		Row r;
 		r.key = word;
 
-		//BinarySearchTree<Row>::Iterator compareWord = table.find(r);
-		compareWord = table.find(r);
+		// man gör en iterator och kollar om ordet word =r.key finns
+		// om den inte finns får man tilbaka table.end()
+		// eftersom man har gått igenom det man har av trädet just nu
+		BinarySearchTree<Row>::Iterator compareWord = table.find(r);
 
-			// ifsats
 			if (compareWord == table.end()) {
 
-				table.insert(r); //sätter in ett objekt från row r i tree t
-				//push_back(word);
+				table.insert(r); //sätter in ett objekt från row r i tree t eftersom det inte finns än
+
 			}
 			else {
-				compareWord->counter++; // om ordet redan finns ökar counter
+				compareWord->counter++; // om ordet redan finns ökar counter på det ordet
 			}
 
-	
         }//while-loop ends
 
-		
-		/*
-		BinarySearchTree<Row>::Iterator p; 
 
-
-		// put values from table (Binary search tree) into a vector
-		for (p = table.begin(); p != table.end(); p++) {
-			Row toVector;
-			toVector.key = p->key;
-			toVector.counter = p->counter;
-			V.push_back(toVector);
-		}*/
 
 
 		for (auto i = table.begin(), end = table.end(); i != end; ++i) {
@@ -194,13 +176,7 @@ void exercise3() {
 		std::cout << "\nEND TREE\n\n";
 
 
-		/*
-		// Display the freq.table
-		std::cout << "------ Table: ----------\n";
-		table.printTable();
-		std::cout << '\n';
-		std::cout << "\nEND TABLE\n\n";
-		*/
+
 
 		// Display the freq.table
 		std::cout << "------ Table: ----------\n";
@@ -224,6 +200,8 @@ void exercise3() {
 
 
 		// COMPARE FACIT WITH FACIT
+		// för att kunna jämföra vectorerna ska man göra en vector av facit-filerna
+		// jämför vector som skapats av binary tree, binary tree har skapats av textfiler
 	
 		std::ifstream file2("../code/frequency_table.txt");  // facit for text.txt
 		//std::ifstream file2("../code/frequency_table_long.txt"); // facit for text_long.txt
@@ -251,41 +229,6 @@ void exercise3() {
 
 
 
-
-/*
-Row* insert( std::string x, Row* t) {
-
-	if (t == nullptr) // insert after a leaf
-	{
-		std::string s = "";
-		// förälder är nullptr i nuläget eftersom man inte vet vem föräldern är än
-		t = new Row{ s, 0, nullptr, nullptr };
-
-	}
-	else if (x < t->key)		//(x < t->key)
-	{
-		Row* newRow = insert(x, t->left); // får en ny nod från if-satsen ovanför
-
-		t->left = newRow; //t->left = förälder till NewNode
-
-		newRow->parent = t; // tillger en förälder t till den nya noden newNode
-
-	}
-	else if (t->key < x)
-	{
-		Row* newRow = insert(x,t->right); // får en ny nod från översta if-satsen
-
-		t->right = newRow;  //t->right = förälder till NewNode
-
-		newRow->parent = t; // tillger en förälder t till den nya noden newNode
-	}
-	else
-	{
-		;  // Duplicate; do nothing
-	}
-	return t;
-}
-*/
 
 
 /*
@@ -330,13 +273,6 @@ bool operator<(const Row& a, const Compareble& b)
 }
 */
 
-/*
-// Constructors
-Row(std::string word, int number)
-	: key{ word }, counter{ number }{
-	//++count_nodes;
-}
-*/
 
 /*
 bool operator<(const Row& rhs)const {
@@ -364,17 +300,3 @@ bool operator<(const Row& a, const Row& b)
 
 }
 */
-
-/*
-bool operator>(const Row& a, const Row& b)
-{
-
-	if (a.key > b.key)
-	{
-		return true;
-	}
-	else {
-		return false;
-	}
-
-}*/

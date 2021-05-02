@@ -231,34 +231,6 @@ public:
 	}
 
 
-	/*
-	
-	void printTable(std::ostream& out = std::cout) const {
-
-		if (isEmpty()) {
-			out << "Empty tree";
-		}
-		else {
-
-			displayTable(root, out);
-
-		}
-	}
-
-	void displayTable(Node* t, std::ostream& out) const {
-
-		int indent = 3;
-
-		if (t != nullptr) {
-
-			out << std::string(indent, ' ') << t->element << '\n';
-		}
-
-	}
-	*/
-
-
-
 
 	/**
 	 * Make the tree logically empty.
