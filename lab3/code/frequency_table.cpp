@@ -64,11 +64,14 @@ struct Row
 			return false;
 		}
 	}
+
+
+
+
 	
 };
 
 // Add other stuff, if needed
-
 
 std::ostream& operator<<(std::ostream& os, const Row& dt)
 {
@@ -77,38 +80,6 @@ std::ostream& operator<<(std::ostream& os, const Row& dt)
 	return os;
 
 }
-
-/*
-// returnerar den minsta
-bool operator<(const Row& a, const Row& b)
-{
-
-	if(a.key < b.key)
-	{
-		return true;
-	}else{
-		return false;
-	}
-	
-}
-*/
-
-/*
-bool operator>(const Row& a, const Row& b)
-{
-
-	if (a.key > b.key)
-	{
-		return true;
-	}
-	else {
-		return false;
-	}
-
-}
-*/
-
-
 
 
 
@@ -137,7 +108,7 @@ void exercise3() {
 
 		// Create a tree
 		BinarySearchTree<Row> table; //Binärt träd med rader.
-		std::vector<std::string>V;
+		std::vector<Row>V;
 
         while(file >> word)
 		{
@@ -194,11 +165,25 @@ void exercise3() {
 	
         }//while-loop ends
 
-		BinarySearchTree<Row>::Iterator p = table.begin();
-		for ( p <= table.end(); p++;);
+		
+		/*
+		BinarySearchTree<Row>::Iterator p; 
 
 
-		//std::copy(table.begin(), table.end(), V.begin());
+		// put values from table (Binary search tree) into a vector
+		for (p = table.begin(); p != table.end(); p++) {
+			Row toVector;
+			toVector.key = p->key;
+			toVector.counter = p->counter;
+			V.push_back(toVector);
+		}*/
+
+
+		for (auto i = table.begin(), end = table.end(); i != end; ++i) {
+			auto counterV = *i; //transform an interator into a counter
+			V.push_back(counterV);
+		}
+
 
 		file.close(); // stänger filen EFTER vi har insetat alla word till binary search
 
@@ -209,14 +194,52 @@ void exercise3() {
 		std::cout << "\nEND TREE\n\n";
 
 
+		/*
 		// Display the freq.table
 		std::cout << "------ Table: ----------\n";
 		table.printTable();
 		std::cout << '\n';
 		std::cout << "\nEND TABLE\n\n";
+		*/
+
+		// Display the freq.table
+		std::cout << "------ Table: ----------\n";
+
+		// skapar en iterator som kan gå igenom vector V och ta fram key och counter
+		for (std::vector<Row>::const_iterator j = V.begin(); j != V.end(); ++j) {
+
+			// variabler som ger mellanslag mellan ord och counter
+			const char separator = ' ';
+			const int wordWidth = 25; //utrymme finns för 25 bokstäver i ett ord
+			const int counterWidth = 3; //utrymme för counter
+
+			// left gör att j->key och j->counte rbörja rtill vänster i sitt lilla utrymme
+			std::cout << std::left << std::setw(wordWidth) << std::setfill(separator) << j->key;
+			std::cout<< std::left << std::setw(counterWidth) << std::setfill(separator) << j->counter << "\n";
+
+		}
+
+		std::cout << "\nEND TABLE\n\n";
 
 
-		// assert();
+
+		// COMPARE FACIT WITH FACIT
+	
+		std::ifstream file2("../code/frequency_table.txt");  // facit for text.txt
+		//std::ifstream file2("../code/frequency_table_long.txt"); // facit for text_long.txt
+
+		std::vector<Row> facit;
+		std::string aWord;
+		int counter2;
+
+		while (file2 >> aWord >> counter2) {
+			Row prepareForFacit;
+			prepareForFacit.key = aWord;
+			prepareForFacit.counter = counter2;
+			facit.push_back(prepareForFacit);
+		}
+
+		 assert(V == facit); // COMPARE FACIT WITH FACIT
 
 	}
 
@@ -323,4 +346,35 @@ bool operator<(const Row& rhs)const {
 	else {
 		return false;
 	}
+}*/
+
+
+
+/*
+// returnerar den minsta
+bool operator<(const Row& a, const Row& b)
+{
+
+	if(a.key < b.key)
+	{
+		return true;
+	}else{
+		return false;
+	}
+
+}
+*/
+
+/*
+bool operator>(const Row& a, const Row& b)
+{
+
+	if (a.key > b.key)
+	{
+		return true;
+	}
+	else {
+		return false;
+	}
+
 }*/

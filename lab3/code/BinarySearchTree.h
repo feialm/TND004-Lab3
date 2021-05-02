@@ -231,14 +231,14 @@ public:
 	}
 
 
+	/*
+	
 	void printTable(std::ostream& out = std::cout) const {
 
 		if (isEmpty()) {
 			out << "Empty tree";
 		}
 		else {
-			// inorder(root, out);
-			int indent = 5;
 
 			displayTable(root, out);
 
@@ -252,12 +252,10 @@ public:
 		if (t != nullptr) {
 
 			out << std::string(indent, ' ') << t->element << '\n';
-			displayTable(t->left, out);
-			displayTable(t->right, out);
 		}
 
 	}
-	
+	*/
 
 
 
