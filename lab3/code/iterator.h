@@ -16,6 +16,8 @@ public:
 	using pointer = Comparable*;  // or also value_type*
 	using reference = Comparable&;  // or also value_type&
 
+	/*******************************************************************/
+
 	//Från länken om iteratorer i labbbeskrivningen @ElinFei
 
 	// contructor 2 st one public, one private
@@ -60,10 +62,37 @@ public:
 	// a reference to a value
 	Comparable* operator->()
 	{
-		return &(p->element); //memroy location
+		return &(p->element); //memory location
 	}
 
-	/*
+	
+
+private:
+	Node* p;
+	BinarySearchTree* pointTree;
+
+
+	//constructor
+	// pointTree is pointing to tree
+	// p is pointing to node
+	Iterator(Node* point, BinarySearchTree* tree) : p{ point }, pointTree{ tree } {
+		//Sök efter p = den du är på 
+		//pointtree = trädet
+		//++count_nodes;
+	}
+
+
+	/* ****************************************************************** */
+	template <typename Comparable>
+	friend class BinarySearchTree;
+
+
+
+}; // end of class BinarySearchTree<Comparable>::Iterator
+
+
+
+/*
 	bool operator==(Iterator a, Iterator b)
 	{
 		if (a == b)
@@ -83,30 +112,4 @@ public:
 		else {
 			return true;
 		}
-	}
-	*/
-
-private:
-	Node* p;
-	BinarySearchTree* pointTree;
-
-
-	//constructor
-	// tree is pointing to tree
-	// t is pointing to node
-	Iterator(Node* point, BinarySearchTree* tree) : p{ point }, pointTree{ tree } {
-		//Sök efter p = den du är på 
-		//pointtree = trädet
-		//++count_nodes;
-	}
-
-
-	/* ****************************************************************** */
-	template <typename Comparable>
-	friend class BinarySearchTree;
-
-
-
-
-
-}; // end of class BinarySearchTree<Comparable>::Iterator
+	}*/

@@ -32,11 +32,6 @@ private:
 public:
 	class Iterator;  // Exercise 2: nested class to be defined in Iterator.h
 
-
-	//Var ska end och begin vara?
-	//Iterator begin();
-	//Iterator end();
-
 	/**********************EXCERCISE 1 @Fei_Elin ***********************/
 
 	// Kolla om vi har leaks
@@ -235,6 +230,38 @@ public:
 		}
 	}
 
+
+	void printTable(std::ostream& out = std::cout) const {
+
+		if (isEmpty()) {
+			out << "Empty tree";
+		}
+		else {
+			// inorder(root, out);
+			int indent = 5;
+
+			displayTable(root, out);
+
+		}
+	}
+
+	void displayTable(Node* t, std::ostream& out) const {
+
+		int indent = 3;
+
+		if (t != nullptr) {
+
+			out << std::string(indent, ' ') << t->element << '\n';
+			displayTable(t->left, out);
+			displayTable(t->right, out);
+		}
+
+	}
+	
+
+
+
+
 	/**
 	 * Make the tree logically empty.
 	 */
@@ -302,6 +329,7 @@ private:
 			}
 
 		}
+		return t;
 
 	}
 
@@ -331,6 +359,7 @@ private:
 			
 
 		}
+		return t;
 
 	}
 
