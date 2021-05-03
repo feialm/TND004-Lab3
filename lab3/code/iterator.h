@@ -65,7 +65,7 @@ public:
 		return &(p->element); //memory location
 	}
 
-	
+
 
 private:
 	Node* p;

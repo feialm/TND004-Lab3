@@ -290,9 +290,7 @@ private:
 				}
 				/*
 				while (t != t->parent->left && t->parent != nullptr) {
-
 					t = t->parent; // climbing up the tree, go up in tree
-
 				}
 				*/
 				return parent;
@@ -326,7 +324,7 @@ private:
 				}
 				return parent;
 			}
-			
+
 
 		}
 		return t;

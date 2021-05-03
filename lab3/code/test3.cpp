@@ -9,7 +9,7 @@
 
 #include "BinarySearchTree.h"
 
-//#define TEST_ITERATOR
+#define TEST_ITERATOR
 
 /* *********************************************
  * Test 3: Iterator
@@ -88,8 +88,8 @@ void test3() {
 			 }*/
 
 			std::cout << "\nMade Innan loop\n";
-			 //Denna får vi fel på. Andra varvet Iterator& operator++() i Iterator.h
-			 // Inorder traversal
+			//Denna får vi fel på. Andra varvet Iterator& operator++() i Iterator.h
+			// Inorder traversal
 			for (auto w : t) {
 				V1.push_back(w);
 			}
