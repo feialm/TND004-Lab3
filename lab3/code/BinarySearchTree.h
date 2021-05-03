@@ -1,9 +1,10 @@
 #pragma once
-
+//#include <vld.h>
 #include <iostream>
 #include <iomanip>
 #include <cassert>  // used in node.h
 #include <string>  // to print out tree
+
 
 #include "dsexceptions.h"
 
@@ -33,21 +34,25 @@ public:
 	class Iterator;  // Exercise 2: nested class to be defined in Iterator.h
 
 	/**********************EXCERCISE 1 @Fei_Elin ***********************/
+	//Tree = wors case list
+	//Best case complete binary tree = height O(logn)
 
-	// Kolla om vi har leaks
-
+	//end() = O(1)
 	Iterator end() //const
 	{
 
 		return Iterator(nullptr, this);
 	}
 
+	//begin() = O(n), eftersom den har findMin
+	//FindMin = wors case O(n), best case O(1)
 	Iterator begin()
 	{
 		if (isEmpty())return end();
 		return Iterator(findMin(root), this);
 	}
 
+	//O(n) because contains is O(n)
 	Iterator find(const Comparable& x)
 	{
 		if (contains(x, root) != nullptr)
@@ -60,7 +65,7 @@ public:
 
 	}
 
-
+	// worst case: O(n^2) för det är ett while-loop samt callar på Min/Max som är O(n)
 	std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const
 	{
 		// comparable är ett interface, alla noder ärver det
@@ -125,6 +130,8 @@ public:
 
 	} // end of find_pred_succ(const Comparable& x) const
 
+	
+	//O(n) om går igenom hela och det är en list
 	Comparable get_parent(int x) {
 
 		Node* temp = root;
@@ -156,12 +163,14 @@ public:
 	/**
 	 * Copy constructor
 	 */
+	//O(1)
 	BinarySearchTree(const BinarySearchTree& rhs) : root{ clone(rhs.root, nullptr) } {
 	}
 
 	/**
 	 * Destructor for the tree
 	 */
+	//O(n) går igenom allt och tömmer
 	~BinarySearchTree() {
 		makeEmpty();
 	}
@@ -169,6 +178,7 @@ public:
 	/**
 	 * Copy assignment: copy and swap idiom
 	 */
+	//O(1)
 	BinarySearchTree& operator=(BinarySearchTree _copy) {
 		std::swap(root, _copy.root);
 		return *this;
@@ -178,6 +188,7 @@ public:
 	 * Find the smallest item in the tree.
 	 * Throw UnderflowException if empty.
 	 */
+	//O(n) worst case  O(1)= Throw UnderflowException if empty.
 	const Comparable& findMin() const {
 		if (isEmpty()) {
 			throw UnderflowException{};
@@ -190,6 +201,7 @@ public:
 	 * Find the largest item in the tree.
 	 * Throw UnderflowException if empty.
 	 */
+	 //O(n) worst case  O(1)= Throw UnderflowException if empty.
 	const Comparable& findMax() const {
 		if (isEmpty()) {
 			throw UnderflowException{};
@@ -201,6 +213,7 @@ public:
 	/**
 	 * Returns true if x is found in the tree.
 	 */
+	 //O(n) kan gå igenom alla. Kallar på contains
 	bool contains(const Comparable& x) const {
 		return (contains(x, root) != nullptr);
 	}
@@ -209,6 +222,7 @@ public:
 	 * Test if the tree is logically empty.
 	 * Return true if empty, false otherwise.
 	 */
+	 // O(1)
 	bool isEmpty() const {
 		return root == nullptr;
 	}
@@ -216,6 +230,8 @@ public:
 	/**
 	 * Print the tree contents in sorted order.
 	 */
+
+	 // O(n)
 	void printTree(std::ostream& out = std::cout) const {
 
 
@@ -235,6 +251,8 @@ public:
 	/**
 	 * Make the tree logically empty.
 	 */
+
+	// O(n) går igenom allt och tömmer
 	void makeEmpty() {
 		root = makeEmpty(root);
 	}
@@ -242,6 +260,8 @@ public:
 	/**
 	 * Insert x into the tree; duplicates are ignored.
 	 */
+
+	//O(n) in wors case O(1) in best case
 	void insert(const Comparable& x) {
 		root = insert(x, root);
 	}
@@ -249,6 +269,7 @@ public:
 	/**
 	 * Remove x from the tree. Nothing is done if x is not found.
 	 */
+	 //O(n) in wors case O(1) in best case
 	void remove(const Comparable& x) {
 		root = remove(x, root);
 	}
@@ -257,6 +278,8 @@ public:
 	 *
 	 * Used for debug purposes
 	 */
+
+	 // O(1)
 	static int get_count_nodes() {
 		return Node::count_nodes;
 	}
@@ -266,9 +289,10 @@ private:
 
 
 	/***********	Exercise 2	********/
+
+
 	// successor - value closest after (value) Node
-
-
+	// O(n) antingen findMin eller while-loop
 	Node* find_successor(Node* t) const {
 		//skriv om den
 
@@ -303,6 +327,7 @@ private:
 
 
 	// predecessor - value closest before (value) Node
+	// O(n) antingen findMin eller while-loop
 	Node* find_predecessor(Node* t) const {
 
 
@@ -337,6 +362,7 @@ private:
 	 * t is the node that roots the subtree.
 	 * Return a pointer to the node storing x.
 	 */
+	//O(n) kan gå genom hela
 	Node* insert(const Comparable& x, Node* t) {
 
 		if (t == nullptr) // insert after a leaf
@@ -375,26 +401,29 @@ private:
 	 * t is the node that roots the subtree.
 	 * Return a pointer to the new root of the subtree that had root x
 	 */
+	//O(n) kan gå genom hela
 	Node* remove(const Comparable& x, Node* t) {
+		
 		if (t == nullptr) {
-			return t;  // Item not found
+			return t;  // Searching through the whole tree, Item not found, (base case) 
 		}
 		if (x < t->element)
 		{
-
-			Node* dummyNode = remove(x, t->left);
+			//dummynode för föräldrar
+			Node* dummyNode = remove(x, t->left); //Vi går till vänster
 
 			t->left = dummyNode;
 
+			//Ifall vi är vid roten. Root har ingen förälder
 			if (dummyNode != nullptr) {
 				dummyNode->parent = t;
 			}
 
-			//t->left = remove(x, t->left);
 		}
 		else if (t->element < x)
 		{
-			Node* dummyNode = remove(x, t->right);
+		
+			Node* dummyNode = remove(x, t->right); //Går till höger
 
 			t->right = dummyNode;
 
@@ -403,23 +432,24 @@ private:
 				dummyNode->parent = t;
 			}
 
-
-			//t->right = remove(x, t->right);
 		}
+		//Här är x = den vi är på
 		else if (t->left != nullptr && t->right != nullptr)
 		{
 			// Two children
 			// no removing, only switching nodes, parent and left child
-			t->element = findMin(t->right)->element;
-			t->right = remove(t->element, t->right);
+			t->element = findMin(t->right)->element; //Måste hitta minsta värdet som är större än x. (t->right)= kollar höger sida = större än x. Byter elementet vi vill ta bort mot ett löv.
+			t->right = remove(t->element, t->right);//vill nu ta bort ex 4. Skickar då in remove(4) som ligger på höger sidan om 3(3 ville vi ta bort förut)
 		}
 		else
-		{
+		{	// if the node that should be rmeoved has one child, checks if child is a left child or right child
 			Node* oldNode = t;
 			t = (t->left != nullptr) ? t->left : t->right; //oldNode->left : OldNode->right
 
-			//oldNode->parent = nullptr; //är detta rätt?? Är detta enda?
 			//Kan ha leaks här?
+			//oldNode->parent = nullptr; //är detta rätt?? Är detta enda?
+			//oldNode->parent = t;
+
 
 
 			/*
@@ -441,6 +471,7 @@ private:
 	 * Private member function to find the smallest item in a subtree t.
 	 * Return node containing the smallest item.
 	 */
+	//O(n)
 	Node* findMin(Node* t) const {
 		if (t == nullptr) {
 			return nullptr;
@@ -457,6 +488,7 @@ private:
 	 * Private member function to find the largest item in a subtree t.
 	 * Return node containing the largest item.
 	 */
+	//O(n)
 	Node* findMax(Node* t) const {
 		if (t != nullptr) {
 			while (t->right != nullptr) {
@@ -473,6 +505,8 @@ private:
 	 * Return a pointer to the node storing x, if x is found
 	 * Otherwise, return nullptr
 	 */
+
+	//O(n) kan gå igenom alla
 	Node* contains(const Comparable& x, Node* t) const {
 		if (t == nullptr) {
 			return t;
@@ -506,6 +540,7 @@ private:
 	/**
 	 * Private member function to make subtree empty.
 	 */
+	//O(n)
 	Node* makeEmpty(Node* t) {
 		if (t != nullptr) {
 			makeEmpty(t->left);
@@ -519,6 +554,7 @@ private:
 	 * Private member function to print a subtree rooted at t in sorted order.
 	 * In-order traversal is used
 	 */
+	 // O(n)
 	void inorder(Node* t, std::ostream& out) const {
 		if (t != nullptr) {
 			inorder(t->left, out);
@@ -529,7 +565,7 @@ private:
 
 
 	/**********************EXCERCISE 1 @Fei_Elin ***********************/
-
+	//O(n)
 	void preorder(Node* t, std::ostream& out, int indent) const {
 
 
@@ -549,7 +585,9 @@ private:
 
 	/**
 	 * Private member function to clone subtree.
-	 *////Denna funkar ej kolla vidare på, debugg. Förälderna
+	 *///
+
+	//O(n) clonar hela trädet
 	Node* clone(Node* t, Node* parent) const {
 
 

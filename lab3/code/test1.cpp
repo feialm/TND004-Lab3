@@ -1,11 +1,13 @@
+
 #include <iostream>
+//#include <vld.h>
 #include <vector>
 #include <sstream>
 #include <cassert>
 
 #include "BinarySearchTree.h"
 
-//#define TEST_PARENT
+#define TEST_PARENT
 
 /* *********************************************
  * Test 1: get_parent

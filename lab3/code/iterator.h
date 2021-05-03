@@ -37,7 +37,7 @@ public:
 
 
 	// Exercise 2: ADD CODE 
-
+	//find_succ = O(n)
 	Iterator& operator++()
 	{
 
@@ -45,6 +45,7 @@ public:
 		return *this;
 	}
 
+	//find_pre = O(n)
 	Iterator& operator--()
 	{
 		p = pointTree->find_predecessor(p);
@@ -54,12 +55,14 @@ public:
 	/////////////////////////////////////////
 
 	// return value node is pointing at
+	//O(1)
 	Comparable& operator*()
 	{
 		return p->element;
 	}
 
 	// a reference to a value
+	//O(1)
 	Comparable* operator->()
 	{
 		return &(p->element); //memory location

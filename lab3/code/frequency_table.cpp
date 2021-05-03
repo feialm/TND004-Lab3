@@ -1,9 +1,11 @@
+#include <vld.h>
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <algorithm>
 #include <cassert>  //assert
+
 
 #include <iterator>
 #include <sstream>
@@ -33,7 +35,7 @@ struct Row
 	// i en row är det t->element men eftersom en row har två värden
 	// skapar man egna operatorer för att JÄMFÖRA key
 	// insert() i binarysearch vet inte vad den ska jämföra och den kallar på dessa operator-funktioner
-
+	//O(1)
 	bool operator<(const Row& rhs) const
 	{
 		if (key < rhs.key)
@@ -45,7 +47,7 @@ struct Row
 		}
 	}
 
-
+	//O(1)
 	bool operator>(const Row& rhs) const
 	{
 		if (key > rhs.key)
@@ -57,7 +59,7 @@ struct Row
 		}
 	}
 
-
+	//O(1)
 	bool operator==(const Row& rhs) const
 	{
 		if (key == rhs.key)
@@ -73,7 +75,7 @@ struct Row
 };
 
 // Add other stuff, if needed
-
+// O(1)
 std::ostream& operator<<(std::ostream& os, const Row& dt)
 {
 	int indent = 10;
@@ -108,6 +110,7 @@ void exercise3() {
 		BinarySearchTree<Row> table; //Binärt träd med rader.
 		std::vector<Row>V;
 
+		//O(n) gå igenom alla
 		while (file >> word)
 		{
 
@@ -125,6 +128,7 @@ void exercise3() {
 			// erase använder iteratorn för att ta bort 'tecken'
 			// word.erase, det är funktionen erase som tar bort tecknen från objektet word
 
+			//erase är enligt cppreference O(n)
 			word.erase(std::remove(word.begin(), word.end(), ','), word.end());
 			word.erase(std::remove(word.begin(), word.end(), '.'), word.end());
 			word.erase(std::remove(word.begin(), word.end(), '"'), word.end());
@@ -161,6 +165,7 @@ void exercise3() {
 
 
 		//Kommer i bokstavsordning för att trädet är i ordning (struktur)
+		// O(n)
 		for (auto i = table.begin(), end = table.end(); i != end; ++i) {
 			auto counterV = *i; //transform an interator into a counter
 			V.push_back(counterV);
@@ -171,6 +176,7 @@ void exercise3() {
 
 		// Display the binary search tree
 		std::cout << "---------Tree: -----------\n";
+		// O(n)
 		table.printTree();
 		std::cout << '\n';
 		std::cout << "\nEND TREE\n\n";
@@ -182,6 +188,7 @@ void exercise3() {
 		std::cout << "\n------ Table: ----------\n";
 
 		// skapar en iterator som kan gå igenom vector V och ta fram key och counter
+		// O(n)
 		for (std::vector<Row>::iterator j = V.begin(); j != V.end(); ++j) {
 
 			// variabler som ger mellanslag mellan ord och counter
@@ -194,52 +201,7 @@ void exercise3() {
 			std::cout << std::left << std::setw(counterWidth) << std::setfill(separator) << j->counter << "\n";
 
 		}
-		/*
-		std::vector<Row>V2;
-		//std::copy(V.begin(), V.end(), V2.begin());
-
-		std::vector<Row>::iterator i = V2.begin();
-		std::vector<Row>::iterator j = V2.begin();
-
-
-		while (i != V2.end()) {
-
-			j = i;
-			while (j != V2.end()) {
-
-				if (i->counter < j->counter) {
-
-					auto temp = *i; // ha * före iteratorn, då får man DET som iteratorn pekar på
-					*i = *j;
-					*j = temp;
-
-				}
-				j++;
-			}
-			i++;
-		}
-
-
-
-
-		std::cout << "\n------ Table Counter: ----------\n";
-		// skapar en iterator som kan gå igenom vector V och ta fram key och counter
-		for (std::vector<Row>::const_iterator j = V.begin(); j != V.end() - 1; ++j) {
-			// variabler som ger mellanslag mellan ord och counter
-			const char separator = ' ';
-			const int wordWidth = 25; //utrymme finns för 25 bokstäver i ett ord
-			const int counterWidth = 3; //utrymme för counter
-
-			// left gör att j->key och j->counter börjar till vänster i sitt lilla utrymme
-			std::cout << std::left << std::setw(wordWidth) << std::setfill(separator) << j->key;
-			std::cout << std::left << std::setw(counterWidth) << std::setfill(separator) << j->counter << "\n";
-
-
-		}
-		std::cout << "\nEND TABLE\n\n";
-
-	*/
-
+		
 		// COMPARE FACIT
 		// för att kunna jämföra vectorerna ska man göra en vector av facit-filerna
 		// jämför vector som skapats av binary tree, binary tree har skapats av textfiler
@@ -252,6 +214,7 @@ void exercise3() {
 		int counter2;
 
 		//Läser sålänge den har sträng, counter osv
+		//O(n)
 		while (file2 >> aWord >> counter2) {
 			Row prepareForFacit;
 			prepareForFacit.key = aWord;
@@ -331,3 +294,51 @@ bool operator<(const Row& a, const Row& b)
 	}
 }
 */
+
+
+
+/*
+		std::vector<Row>V2;
+		//std::copy(V.begin(), V.end(), V2.begin());
+
+		std::vector<Row>::iterator i = V2.begin();
+		std::vector<Row>::iterator j = V2.begin();
+
+
+		while (i != V2.end()) {
+
+			j = i;
+			while (j != V2.end()) {
+
+				if (i->counter < j->counter) {
+
+					auto temp = *i; // ha * före iteratorn, då får man DET som iteratorn pekar på
+					*i = *j;
+					*j = temp;
+
+				}
+				j++;
+			}
+			i++;
+		}
+
+
+
+
+		std::cout << "\n------ Table Counter: ----------\n";
+		// skapar en iterator som kan gå igenom vector V och ta fram key och counter
+		for (std::vector<Row>::const_iterator j = V.begin(); j != V.end() - 1; ++j) {
+			// variabler som ger mellanslag mellan ord och counter
+			const char separator = ' ';
+			const int wordWidth = 25; //utrymme finns för 25 bokstäver i ett ord
+			const int counterWidth = 3; //utrymme för counter
+
+			// left gör att j->key och j->counter börjar till vänster i sitt lilla utrymme
+			std::cout << std::left << std::setw(wordWidth) << std::setfill(separator) << j->key;
+			std::cout << std::left << std::setw(counterWidth) << std::setfill(separator) << j->counter << "\n";
+
+
+		}
+		std::cout << "\nEND TABLE\n\n";
+
+	*/
