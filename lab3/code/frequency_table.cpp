@@ -45,6 +45,7 @@ struct Row
 		else {
 			return false;
 		}
+		//return (key < rhs.key); Vi kan skriva detta istället
 	}
 
 	//O(1)
@@ -94,8 +95,8 @@ void exercise3() {
 
 		std::string word = "";
 
-		std::ifstream file("../code/text.txt");  // contains 56 unique words
-		//std::ifstream file("../code/text_long.txt"); // contains 497 unique words
+		//std::ifstream file("../code/text.txt");  // contains 56 unique words
+		std::ifstream file("../code/text_long.txt"); // contains 497 unique words
 
 		if (!file) {
 			std::cout << "Couldn't open file text.txt\n";
@@ -141,6 +142,13 @@ void exercise3() {
 			word.erase(std::remove(word.begin(), word.end(), ':'), word.end());
 
 			//remove_if kan man göra det i en linje
+			//Arayy of the caracters. Call remove_if. check if it is one of the symbole in the array
+			//const std::string PunctSigns{".,!?:\"();"};
+			/*auto isNotPunct = [](char c) {
+				return (std::find(std::begin(PunctSigns), std::end(PunctSigns), c) ==
+					std::end(PunctSigns));
+			};
+			*/
 
 
 			Row r;
@@ -206,8 +214,8 @@ void exercise3() {
 		// för att kunna jämföra vectorerna ska man göra en vector av facit-filerna
 		// jämför vector som skapats av binary tree, binary tree har skapats av textfiler
 
-		std::ifstream file2("../code/frequency_table.txt");  // facit for text.txt
-		//std::ifstream file2("../code/frequency_table_long.txt"); // facit for text_long.txt
+		//std::ifstream file2("../code/frequency_table.txt");  // facit for text.txt
+		std::ifstream file2("../code/frequency_table_long.txt"); // facit for text_long.txt
 
 		std::vector<Row> facit;
 		std::string aWord;

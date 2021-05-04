@@ -64,32 +64,36 @@ public:
 		}
 
 	}
+	
 
-	// worst case: O(n^2) för det är ett while-loop samt callar på Min/Max som är O(n)
+	//Ex söker -5 får tillbaka (-5, 1). Säker 50 får (14,50)
+	// worst case: O(n) 
 	std::pair<Comparable, Comparable> find_pred_succ(const Comparable& x) const
 	{
 		// comparable är ett interface, alla noder ärver det
 		// auto fungerar också men get inte exmepel när man kodar
 		//Node *t = this;
 
-		Node* t = root;
-		Comparable a = x;
-		Comparable b = x;
+		Node* t = root; //börjar från roten
+		Comparable a = x; //Initializera med x för x kanske är lägre än minsta värdet i träd
+		Comparable b = x;//Initializera med x för x kanske är över maxvärde i träd
 
 		std::pair<Comparable, Comparable> aANDb = std::make_pair(a, b);
 		//(t->left != nullptr) || (t->right != nullptr)
 		while (t != nullptr) {
 
 			if (x > t->element) {
-				aANDb.first = t->element; // updatera a
+				aANDb.first = t->element; // updatera a (varje gång vi går åt höger)
 				t = t->right;
 			}
 			else if (x < t->element) {
 				aANDb.second = t->element; // updatera b
 				t = t->left;
 			}
+			//Vi har hittat elementet vi söker efter
 			else if (x == t->element) {
 
+				//De är INTE ett löv
 				if ((t->right != nullptr) && (t->left != nullptr)) {
 
 					Node* dummy1 = findMin(t->right);
@@ -101,10 +105,12 @@ public:
 					t = nullptr;
 
 				}
+				//Det är ett löv
 				if ((t->right == nullptr) && (t->left == nullptr)) {
 					//break;
 					t = nullptr;
 				}
+				//Har ett barn
 				else if (t->right == nullptr) {
 
 					Node* dummy3 = findMax(t->left);
@@ -112,6 +118,7 @@ public:
 					//break;
 					t = nullptr;
 				}
+				//Har ett barn
 				else if (t->left == nullptr) {
 
 					Node* dummy4 = findMin(t->right);
@@ -120,26 +127,23 @@ public:
 					t = nullptr;
 
 				}
-
 			}
-
-
-
 		}
-		return aANDb;
+		return aANDb; //return {a,b};
 
 	} // end of find_pred_succ(const Comparable& x) const
 
-	
+	//Get tillbaka föräldern till x
 	//O(n) om går igenom hela och det är en list
 	Comparable get_parent(int x) {
 
 		Node* temp = root;
-		Node* child = contains(x, temp); //Skickar tillbaka nullptr om x inte finns
+		//contains:Return a pointer to the node storing x
+		Node* child = contains(x, temp); //Skickar tillbaka nullptr om x inte finns.
 
 
 		if (child == nullptr) {
-			return Comparable{};
+			return Comparable{}; //Om inte x finns så lämna tillbaka detta
 		}
 		else {
 			Node* parentNode = child->parent;
@@ -291,7 +295,7 @@ private:
 	/***********	Exercise 2	********/
 
 
-	// successor - value closest after (value) Node
+	// successor - value closest after (value) Node. Talet som är större. Efterträdare
 	// O(n) antingen findMin eller while-loop
 	Node* find_successor(Node* t) const {
 		//skriv om den
